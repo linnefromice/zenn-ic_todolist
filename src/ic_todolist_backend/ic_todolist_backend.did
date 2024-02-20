@@ -1,3 +1,6 @@
+type Todo = record { contents : text; is_completed : bool };
 service : {
-    "greet": (text) -> (text) query;
+  add : (text) -> (nat64);
+  get : (nat64) -> (Todo) query;
+  update_status : (bool) -> ();
 }
