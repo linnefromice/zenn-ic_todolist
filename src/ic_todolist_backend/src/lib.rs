@@ -5,25 +5,36 @@ thread_local! {
     static TODOS: RefCell<Vec<Todo>> = RefCell::new(Vec::new());
 }
 
-#[derive(CandidType)]
+#[derive(Clone, CandidType)]
 struct Todo {
     contents: String,
     is_completed: bool,
 }
 
 #[ic_cdk::query]
-fn get(_idx: u64) -> Todo {
-    Todo { contents: "Dummy".to_string(), is_completed: false }
+fn get(idx: u64) -> Todo {
+    TODOS.with(|todos| {
+        let todos = todos.borrow();
+        todos[idx as usize].clone()
+    })
 }
 
 #[ic_cdk::update]
-fn add(_contents: String) -> u64 {
-    0
+fn add(contents: String) -> u64 {
+    let val = Todo { contents, is_completed: false };
+    TODOS.with(|todos| {
+        let mut todos = todos.borrow_mut();
+        todos.push(val);
+        todos.len() as u64 - 1
+    })
 }
 
 #[ic_cdk::update]
-fn update_status(_is_completed: bool) {
-    // dummy
+fn update_status(idx: u64, is_completed: bool) {
+    TODOS.with(|todos| {
+        let mut todos = todos.borrow_mut();
+        todos[idx as usize].is_completed = is_completed;
+    });
 }
 
 #[cfg(test)]
