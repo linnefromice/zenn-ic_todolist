@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "ic_todolist_backend": {
+      "candid": "src/ic_todolist_backend/ic_todolist_backend.did",
+      "package": "ic_todolist_backend",
+      "type": "rust"
+    },
+    "ic_todolist_frontend": {
+      "dependencies": [
+        "ic_todolist_backend"
+      ],
+      "source": [
+        "src/ic_todolist_frontend/assets"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
